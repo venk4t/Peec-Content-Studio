@@ -255,7 +255,7 @@ Demo flow:
 
 ## Team
 
-`<TEAM_MEMBERS>`
+Max, Venkat & Lucas
 
 Built at the **Big Berlin Hack** by Tech Europe, April 25–26 2026, at The Delta Campus & CODE University, Berlin.
 
