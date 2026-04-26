@@ -1,0 +1,86 @@
+import { NextResponse } from "next/server";
+import { spawn } from "node:child_process";
+import path from "node:path";
+
+const SCRIPT_REL = path.join("vendor", "list_projects.py");
+const TIMEOUT_MS = 30_000;
+
+interface PeecProject {
+  id: string;
+  name: string;
+  status?: string;
+}
+
+/**
+ * GET /api/peec/projects
+ *   Spawns `python3 vendor/list_projects.py`, captures stdout JSON.
+ *   → 200 { projects: PeecProject[] }
+ *   → 500 { error: string }   (with the python stderr verbatim)
+ */
+export async function GET() {
+  const cwd = process.cwd();
+  const scriptPath = path.join(cwd, SCRIPT_REL);
+
+  let stdout = "";
+  let stderr = "";
+
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const proc = spawn("python3", [scriptPath], {
+        cwd,
+        env: process.env,
+        stdio: ["ignore", "pipe", "pipe"],
+      });
+
+      const timer = setTimeout(() => {
+        proc.kill("SIGTERM");
+        reject(
+          new Error(
+            `list_projects.py exceeded ${TIMEOUT_MS}ms — likely stuck on OAuth login. ` +
+              `Run \`python3 ${SCRIPT_REL}\` from the project root to complete browser auth.`,
+          ),
+        );
+      }, TIMEOUT_MS);
+
+      proc.stdout.on("data", (chunk: Buffer) => (stdout += chunk.toString()));
+      proc.stderr.on("data", (chunk: Buffer) => (stderr += chunk.toString()));
+
+      proc.on("error", (err) => {
+        clearTimeout(timer);
+        reject(new Error(`Failed to spawn python3: ${err.message}`));
+      });
+
+      proc.on("close", (code) => {
+        clearTimeout(timer);
+        if (code !== 0) {
+          reject(
+            new Error(
+              `list_projects.py exited with code ${code}. stderr:\n${stderr.trim() || "(empty)"}`,
+            ),
+          );
+          return;
+        }
+        resolve();
+      });
+    });
+  } catch (err) {
+    return NextResponse.json(
+      { error: (err as Error).message },
+      { status: 500 },
+    );
+  }
+
+  let projects: PeecProject[];
+  try {
+    projects = JSON.parse(stdout) as PeecProject[];
+  } catch {
+    return NextResponse.json(
+      {
+        error: `list_projects.py returned non-JSON. stdout:\n${stdout.slice(0, 600)}`,
+      },
+      { status: 500 },
+    );
+  }
+
+  return NextResponse.json({ projects });
+}

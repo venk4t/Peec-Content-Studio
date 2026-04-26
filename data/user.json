@@ -1,0 +1,341 @@
+{
+  "brand_name": "Reonic",
+  "own_visibility": 0.04,
+  "competitor_avg_visibility": 0.12058823529411763,
+  "competitors": [
+    {
+      "id": "kw_105a82a4-bfb2-4e9b-8383-b1a33dddbce4",
+      "name": "Solargraf",
+      "is_own": false,
+      "visibility": 0.14,
+      "sentiment": 63,
+      "share_of_voice": 0.05
+    },
+    {
+      "id": "kw_2defccbd-80ff-4659-881a-53323a7f740e",
+      "name": "The Matcha Tokyo",
+      "is_own": false,
+      "visibility": 0.0,
+      "sentiment": 0,
+      "share_of_voice": 0.0
+    },
+    {
+      "id": "kw_362b495c-2c84-4ac4-b5c3-468c203ba481",
+      "name": "Matchasome",
+      "is_own": false,
+      "visibility": 0.07,
+      "sentiment": 68,
+      "share_of_voice": 0.02
+    },
+    {
+      "id": "kw_3a9d25f8-b8b0-4144-8929-c1500560e0f2",
+      "name": "Scoop",
+      "is_own": false,
+      "visibility": 0.14,
+      "sentiment": 66,
+      "share_of_voice": 0.07
+    },
+    {
+      "id": "kw_3d7a8f18-ba8f-4c1e-a109-047ca9b8244a",
+      "name": "Sunbase",
+      "is_own": false,
+      "visibility": 0.09,
+      "sentiment": 63,
+      "share_of_voice": 0.03
+    },
+    {
+      "id": "kw_406254cd-eb26-45ec-83e4-f24fce492af1",
+      "name": "PV*Sol",
+      "is_own": false,
+      "visibility": 0.14,
+      "sentiment": 60,
+      "share_of_voice": 0.06
+    },
+    {
+      "id": "kw_4b401147-9c13-44ec-89b5-3b1b91ec53da",
+      "name": "Aurora",
+      "is_own": false,
+      "visibility": 0.24,
+      "sentiment": 65,
+      "share_of_voice": 0.17
+    },
+    {
+      "id": "kw_4c5b3959-1d93-4ad8-a5a0-398ab7deee73",
+      "name": "Matchashop",
+      "is_own": false,
+      "visibility": 0.07,
+      "sentiment": 66,
+      "share_of_voice": 0.02
+    },
+    {
+      "id": "kw_6d939c48-b5d2-4b32-81e1-708651269bae",
+      "name": "PVsyst",
+      "is_own": false,
+      "visibility": 0.09,
+      "sentiment": 64,
+      "share_of_voice": 0.04
+    },
+    {
+      "id": "kw_6fbda569-d525-45e7-9dec-bbf3a9aa6fe9",
+      "name": "ARKA 360",
+      "is_own": false,
+      "visibility": 0.07,
+      "sentiment": 67,
+      "share_of_voice": 0.02
+    },
+    {
+      "id": "kw_81162387-2993-40c5-9784-22b760bfca09",
+      "name": "Sollit",
+      "is_own": false,
+      "visibility": 0.07,
+      "sentiment": 62,
+      "share_of_voice": 0.05
+    },
+    {
+      "id": "kw_b575a14e-98fb-4ca3-a872-8bde49f257c8",
+      "name": "HelioScope",
+      "is_own": false,
+      "visibility": 0.19,
+      "sentiment": 65,
+      "share_of_voice": 0.06
+    },
+    {
+      "id": "kw_b657e460-1945-45fc-a688-0ee03e3739ec",
+      "name": "OpusFlow",
+      "is_own": false,
+      "visibility": 0.21,
+      "sentiment": 59,
+      "share_of_voice": 0.12
+    },
+    {
+      "id": "kw_b6998062-505a-443f-8f49-06b283b9372a",
+      "name": "Friends of Tea",
+      "is_own": false,
+      "visibility": 0.01,
+      "sentiment": 62,
+      "share_of_voice": 0.0
+    },
+    {
+      "id": "kw_bf3097ba-6b09-4131-bcc9-913651eaefd1",
+      "name": "PVcase",
+      "is_own": false,
+      "visibility": 0.09,
+      "sentiment": 65,
+      "share_of_voice": 0.03
+    },
+    {
+      "id": "kw_dddf51c9-e979-4a7e-9532-1f94c2856529",
+      "name": "Enphase",
+      "is_own": false,
+      "visibility": 0.13,
+      "sentiment": 67,
+      "share_of_voice": 0.05
+    },
+    {
+      "id": "kw_f8cc82db-611f-440e-8b28-7edac6973584",
+      "name": "Autarc",
+      "is_own": false,
+      "visibility": 0.01,
+      "sentiment": 0,
+      "share_of_voice": 0.0
+    },
+    {
+      "id": "kw_fc97f9e2-149b-488d-8ef9-8f46d1792d43",
+      "name": "Just Matcha",
+      "is_own": false,
+      "visibility": 0.0,
+      "sentiment": 0,
+      "share_of_voice": 0.0
+    },
+    {
+      "id": "kw_fec50956-3b9f-4878-bb96-7d9f955fdc81",
+      "name": "OpenSolar",
+      "is_own": false,
+      "visibility": 0.29,
+      "sentiment": 63,
+      "share_of_voice": 0.16
+    }
+  ],
+  "top_url_contents": [
+    {
+      "url": "https://spotio.com/blog/solar-design-software",
+      "citation_count": 57,
+      "classification": "LISTICLE",
+      "content": "You spend hours building a solar proposal only to find out mid-install that the shading analysis was off, the panel layout doesn’t match the actual roof, or the customer’s savings projections were based on outdated utility rates. The rework costs you time. The change orders cost you money. And the homeowner starts questioning whether you know what you’re doing.\n\nThat’s the reality for solar companies still designing systems with spreadsheets, generic CAD tools, or software that hasn’t kept pace with how the industry actually works in 2026. The right **solar design software** eliminates most of"
+    },
+    {
+      "url": "https://opusflow.io/blog/solar/best-solar-design-software",
+      "citation_count": 31,
+      "classification": "LISTICLE",
+      "content": "Imagine standing on a rooftop with just a tape measure and a calculator, trying to figure out how many panels will fit, how much energy they’ll produce, and how long it will take your client to break even. Sounds exhausting, right? That was in the past.\n\nToday, solar professionals have something far better: design software that does all the demanding work. Instead of endless guesswork and spreadsheets, installers, engineers, and developers now have digital assistants that make their work faster, smarter, and more profitable.\n\nLet’s take a look at leading platforms in 2026. We’ve listed ten bes"
+    },
+    {
+      "url": "https://scoop.solar/blog/solar-software-companies",
+      "citation_count": 22,
+      "classification": "LISTICLE",
+      "content": "The best solar software company in 2026 is [Scoop](http://scoop.solar), a central operations hub that connects all your teams and your tools together, so you can manage your operations from one single platform. And depending on your needs, other great software tools will make sense as part of your overall tech stack.\n\nIn this guide, we’ve highlighted the 8 best solar software companies, along with their strengths and what type of organization they are made for.\n\nThis article will explore five solar energy solutions and how they increase team efficiency and streamline key areas of your business"
+    },
+    {
+      "url": "https://sollit.com",
+      "citation_count": 17,
+      "classification": "HOMEPAGE",
+      "content": " Manage your leads\n\nDesign like a pro\n\nIncrease your sales\n\nFirst Time Right installations\n\nSmart service\n\n### Manage your leads\n\nManage every lead from one central place. Connect your data and marketing channels. Quickly spot new opportunities and follow up with ease. Gain more clarity, better insight and real results.\n\n* All channels in one system\n\n* Always know where the opportunities are\n\n* Fast follow-up means higher conversion\n\n[Discover the software](https://sollit.com/software/lead/)\n\n### Design like a pro\n\nFrom digital surveys to detailed layout plans — with Sollit, you gather everyth"
+    },
+    {
+      "url": "https://morningagclips.com/6-best-renewable-energy-software-companies-in-2025",
+      "citation_count": 17,
+      "classification": "ARTICLE",
+      "content": "BOISE, Idaho — The energy game has changed. With climate goals tightening and agriculture searching for more sustainable answers, renewable energy software isn’t just “nice to have” anymore—it’s mission-critical. From optimizing solar farms to turning agricultural waste into usable energy, software is behind the scenes, keeping everything smart, scalable, and efficient.\n\nIn 2025, a handful of companies are leading the way. They’re not just offering dashboards or monitoring tools—they’re solving real-world energy challenges with tech. And yes, some are even making waves in agri-tech, where clea"
+    }
+  ],
+  "top_phrases": [
+    {
+      "id": "pr_281c3495-6180-49a5-9b62-9ebf8f6b7424",
+      "text": "What is the best all in one software solution for renewable energy installers?",
+      "visibility": 0.19,
+      "mention_count": 17
+    },
+    {
+      "id": "pr_1ef974c7-ba23-40e3-83ae-7dec18a71da7",
+      "text": "Which software can I use as a PV installer to plan my processes end-to-end?",
+      "visibility": 0.03,
+      "mention_count": 4
+    },
+    {
+      "id": "pr_fff3946a-a354-4a45-9f1f-fdd164c2048d",
+      "text": "Bester Matcha-Tee Deutschland Empfehlung",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_98e2a94c-8e9c-458b-9d1a-b6d727d8566f",
+      "text": "Best ceremonial matcha brands for daily drinking",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_d3832251-80ac-4da6-aab6-cd26f9378a9c",
+      "text": "Welche Matcha-Marken werden von KI empfohlen?",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_38cf8fbe-59e9-4688-9806-865b856f83d9",
+      "text": "Korean matcha vs Japanese matcha – which is better?",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_ffad6f98-445a-4ac7-a556-cce4f794a027",
+      "text": "Hadong Matcha – was macht ihn besonders?",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_2077a154-657e-471c-92d0-11a47edcfb15",
+      "text": "Wo kann ich hochwertigen Ceremonial Grade Matcha online kaufen?",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_7144764d-f839-4a95-8499-a719bc200023",
+      "text": "What is Hadong matcha and where to buy it?",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_4ef43aa5-b9b5-4dd0-873e-c413ddd9c89a",
+      "text": "Where to buy ceremonial grade matcha online in Germany?",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_6246e6ae-12b1-4b5b-824e-59495c5592ac",
+      "text": "Was ist der beste Ceremonial Matcha aus Korea?",
+      "visibility": 0.0,
+      "mention_count": 0
+    },
+    {
+      "id": "pr_90f7964f-da1c-4b07-b40b-3eb85c78f8ef",
+      "text": "Unterschied zwischen Ceremonial Grade und Culinary Grade Matcha",
+      "visibility": 0.0,
+      "mention_count": 0
+    }
+  ],
+  "actions": [
+    {
+      "id": "owned_00",
+      "text": "Take inspiration by articles around “Solar design software” and other common phrases. Mention your own brand favorably.",
+      "type": "owned",
+      "opportunity_score": 99
+    },
+    {
+      "id": "owned_01",
+      "text": "Create content similar to [10 Best Solar Design Software In 2026 | Opusflow](https://opusflow.io/blog/solar/best-solar-design-software) on opusflow.io and other top-performing listicles.",
+      "type": "owned",
+      "opportunity_score": 98
+    },
+    {
+      "id": "owned_02",
+      "text": "Incorporate \"Pvsyst photovoltaic system simulation software\" and other common phrases into the copy of your homepage.",
+      "type": "owned",
+      "opportunity_score": 95
+    },
+    {
+      "id": "editorial_03",
+      "text": "Get featured in [bonappetit.com](https://bonappetit.com). Their listicles are regularly cited by LLMs.",
+      "type": "editorial",
+      "opportunity_score": 62
+    },
+    {
+      "id": "editorial_04",
+      "text": "Contact the author of [The Best Matcha Powder, Vetted by a Daily Drinker (2025)](https://bonappetit.com/story/best-matcha-powder) on bonappetit.com to be included in their listicle.",
+      "type": "editorial",
+      "opportunity_score": 61
+    },
+    {
+      "id": "ugc_05",
+      "text": "Get your brand mentioned in [Question for Solar company owners? What software do you use in your business?](https://reddit.com/r/solar/comments/15yttla/question_for_solar_company_owners_what_software). Or look out for similar content and join those conversations early.",
+      "type": "ugc",
+      "opportunity_score": 29
+    },
+    {
+      "id": "ugc_06",
+      "text": "Participate in [r/solar](https://www.reddit.com/r/solar) and mention your own brand favorably.",
+      "type": "ugc",
+      "opportunity_score": 28
+    },
+    {
+      "id": "ugc_07",
+      "text": "Create posts around the topic \"Solar design software\" and mention your own brand favorably.",
+      "type": "ugc",
+      "opportunity_score": 27
+    },
+    {
+      "id": "ugc_08",
+      "text": "Contact [OpusFlow](https://www.youtube.com/channel/UCMHQgwQdLksSxSrUeluGv6g). Ask them for a collaboration or brand inclusion.",
+      "type": "ugc",
+      "opportunity_score": 26
+    },
+    {
+      "id": "ugc_09",
+      "text": "Take inspiration from [Top 10 solar design software tools in 2026 | best PV tools for installers](https://youtube.com/watch?v=omAdh-KEsYI). Can you create similar videos?",
+      "type": "ugc",
+      "opportunity_score": 25
+    },
+    {
+      "id": "owned_10",
+      "text": "Take inspiration by product pages around \"Solar design software\" and other common phrases. Mention your own brand favorably on these pages.",
+      "type": "owned",
+      "opportunity_score": 21
+    },
+    {
+      "id": "owned_11",
+      "text": "Create content similar to [Solar design software](https://pvcase.com/solar-design-software) on pvcase.com and other top-performing product pages.",
+      "type": "owned",
+      "opportunity_score": 20
+    }
+  ],
+  "source": "live-mcp",
+  "updated_at": "2026-04-26"
+}
