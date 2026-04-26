@@ -249,7 +249,7 @@ type Suggestion = {
 
 ## Demo
 
-**2-minute video walkthrough:** `<LOOM_URL>`
+**2-minute video walkthrough:** [Watch on Loom](https://www.loom.com/share/b1970bde94d745c9b287caa47170bb71)
 
 Demo flow:
 1. Pick a Peec project → live data loads.
@@ -267,7 +267,7 @@ Demo flow:
 | --- | --- |
 | Public GitHub repository | ✅ |
 | Comprehensive README (this file) | ✅ |
-| 2-minute video demo | `<LOOM_URL>` |
+| 2-minute video demo | [Watch on Loom](https://www.loom.com/share/b1970bde94d745c9b287caa47170bb71) |
 | ≥3 partner technologies | ✅ Gemini (DeepMind) + Tavily + Pioneer (Fastino) |
 | Track | Peec AI — *0 → 1 AI Marketer* |
 | Built newly at the hackathon | ✅ |
