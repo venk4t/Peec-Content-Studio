@@ -1,6 +1,11 @@
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { extractEntities } from "@/lib/pioneer";
-import { getRelevantContext } from "@/lib/peec";
+import { getRelevantContext, setCurrentProject } from "@/lib/peec";
+import {
+  PROJECT_COOKIE_NAME,
+  isValidProjectId,
+} from "@/lib/peec-project-cookie";
 import {
   generatePromptCandidates,
   scorePromptCandidates,
@@ -57,6 +62,15 @@ export async function POST(req: Request) {
   }
 
   const { articleTitle, articleText } = parsed.data;
+
+  // Resolve the selected project from the cookie so peec accessors load
+  // the right snapshot. API routes bypass the dashboard layout's
+  // ensureProjectSelected(), so we must resolve it ourselves.
+  const store = await cookies();
+  const rawProjectId = store.get(PROJECT_COOKIE_NAME)?.value;
+  const projectId = isValidProjectId(rawProjectId) ? rawProjectId : undefined;
+  if (projectId) setCurrentProject(projectId);
+
   if (articleText.trim().length < MIN_TEXT_LENGTH) {
     return jsonError("validation", "Article text too short to simulate", 400);
   }
@@ -98,7 +112,7 @@ export async function POST(req: Request) {
 
       try {
         await Promise.race([
-          runPipeline(articleTitle, articleText, send),
+          runPipeline(articleTitle, articleText, send, projectId),
           timeoutPromise,
         ]);
       } catch (err) {
@@ -142,6 +156,7 @@ async function runPipeline(
   articleTitle: string,
   articleText: string,
   send: (event: SimulatorEvent) => void,
+  projectId: string | undefined,
 ) {
   // ── 1. Pioneer ────────────────────────────────────────────────────────
   send({ type: "step", key: "pioneer", status: "running" });
@@ -172,7 +187,7 @@ async function runPipeline(
   const t2 = performance.now();
   let peecContext;
   try {
-    peecContext = getRelevantContext(articleTitle);
+    peecContext = getRelevantContext(articleTitle, projectId);
   } catch (err) {
     throw new TaggedError("peec", String((err as Error).message ?? err));
   }

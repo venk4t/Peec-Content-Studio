@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { z } from "zod";
-import { getRelevantContext } from "@/lib/peec";
+import { getRelevantContext, setCurrentProject } from "@/lib/peec";
+import {
+  PROJECT_COOKIE_NAME,
+  isValidProjectId,
+} from "@/lib/peec-project-cookie";
 import { searchTopic } from "@/lib/tavily";
 import { extractEntities } from "@/lib/pioneer";
 import { generateSuggestions } from "@/lib/gemini";
@@ -117,13 +122,14 @@ async function timed<T>(
 async function runSuggest(
   articleTitle: string,
   articleText: string,
+  projectId: string | undefined,
 ): Promise<Suggestion[]> {
   // Phase 1 — three pre-calls in parallel. Use allSettled so we can attribute
   // the failure to a specific provider rather than getting the generic
   // first-rejection from Promise.all.
   const phaseStart = performance.now();
   const [peecRes, tavilyRes, pioneerRes] = await Promise.allSettled([
-    timed("peec", () => getRelevantContext(articleTitle)),
+    timed("peec", () => getRelevantContext(articleTitle, projectId)),
     timed("tavily", () => searchTopic(articleTitle, { maxResults: 3 })),
     timed("pioneer", () =>
       extractEntities(articleText, [...ENTITY_LABELS]),
@@ -231,9 +237,17 @@ export async function POST(req: Request) {
     );
   });
 
+  // Read the selected project from the cookie so peec accessors load
+  // the right snapshot. API routes don't go through the dashboard layout's
+  // ensureProjectSelected(), so we must resolve it here.
+  const store = await cookies();
+  const rawProjectId = store.get(PROJECT_COOKIE_NAME)?.value;
+  const projectId = isValidProjectId(rawProjectId) ? rawProjectId : undefined;
+  if (projectId) setCurrentProject(projectId);
+
   try {
     const suggestions = await Promise.race([
-      runSuggest(articleTitle, articleText),
+      runSuggest(articleTitle, articleText, projectId),
       timeoutPromise,
     ]);
     const totalMs = performance.now() - t0;
