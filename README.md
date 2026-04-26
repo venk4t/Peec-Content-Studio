@@ -1,6 +1,6 @@
 # Peec Content Studio
 
-> **Grammarly for GEO** — a writing companion that tells human authors *which phrases to use* so their text gets cited by ChatGPT, Perplexity, Gemini and other AI models. Generative Engine Optimization at the phrase level.
+> We have improved Peec AI's Actions feature by building *Grammarly for GEO*: a writing companion that tells humans which deep, contextual insights, so their text gets cited by ChatGPT, Perplexity, Gemini and other AI models. Generative Engine Optimization meets text editor. Also ships with a fine tuned GEO simulator built with Pioneer GLiNER micro model.
 
 Built at the **Big Berlin Hack** (Tech Europe, April 2026) for the **Peec AI** track.
 
