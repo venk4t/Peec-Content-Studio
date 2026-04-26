@@ -7,6 +7,7 @@ import {
   projectFilename,
 } from "@/lib/peec-project-cookie";
 import { clearProjectCache } from "@/lib/peec";
+import { describePythonBin, getPythonBin } from "@/lib/python-bin";
 
 export const maxDuration = 90; // Vercel runtime cap (seconds)
 
@@ -35,9 +36,11 @@ type SsePayload =
 /**
  * POST /api/peec/fetch  body: { projectId: string }
  *
- * Spawns `python3 vendor/peec_full_fetch.py --project-id <id> --output …`
+ * Spawns `<python> vendor/peec_full_fetch.py --project-id <id> --output …`
  * and streams its stderr line-by-line as SSE so the onboarding UI can
- * render real-time progress.
+ * render real-time progress. The Python interpreter is resolved by
+ * `getPythonBin()` (honors PYTHON_BIN; falls back to python3 → python →
+ * py -3 on Windows).
  *
  * Wire format:
  *   event: phase   data: {key, status, ms?, detail?}
@@ -68,6 +71,14 @@ export async function POST(req: Request) {
   const outputAbs = path.join(cwd, "data", projectFilename(projectId));
   const outputRel = path.join("data", projectFilename(projectId));
 
+  let py;
+  try {
+    py = getPythonBin();
+  } catch (err) {
+    return jsonError("python", (err as Error).message, 500);
+  }
+  const pyDesc = describePythonBin(py);
+
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream<Uint8Array>({
@@ -85,6 +96,7 @@ export async function POST(req: Request) {
         proc = spawn(
           resolvePython(),
           [
+            ...py.args,
             scriptPath,
             "--project-id",
             projectId,
@@ -101,7 +113,7 @@ export async function POST(req: Request) {
         send("error", {
           type: "error",
           source: "spawn",
-          message: `Failed to spawn python3: ${(err as Error).message}`,
+          message: `Failed to spawn ${pyDesc}: ${(err as Error).message}`,
         });
         controller.close();
         return;
@@ -157,7 +169,7 @@ export async function POST(req: Request) {
         send("error", {
           type: "error",
           source: "spawn",
-          message: `python3 failed to start: ${err.message}`,
+          message: `${pyDesc} failed to start: ${err.message}`,
         });
         close();
       });
