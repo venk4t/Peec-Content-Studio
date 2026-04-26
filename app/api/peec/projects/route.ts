@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { spawn } from "node:child_process";
 import path from "node:path";
+import { describePythonBin, getPythonBin } from "@/lib/python-bin";
 
 const SCRIPT_REL = path.join("vendor", "list_projects.py");
 const TIMEOUT_MS = 30_000;
@@ -13,20 +14,34 @@ interface PeecProject {
 
 /**
  * GET /api/peec/projects
- *   Spawns `python3 vendor/list_projects.py`, captures stdout JSON.
+ *   Spawns `<python> vendor/list_projects.py`, captures stdout JSON.
  *   → 200 { projects: PeecProject[] }
  *   → 500 { error: string }   (with the python stderr verbatim)
+ *
+ * The Python interpreter is resolved cross-platform via `getPythonBin()`
+ * (honors PYTHON_BIN, falls back to python3 → python → py -3 on Windows).
  */
 export async function GET() {
   const cwd = process.cwd();
   const scriptPath = path.join(cwd, SCRIPT_REL);
+
+  let py;
+  try {
+    py = getPythonBin();
+  } catch (err) {
+    return NextResponse.json(
+      { error: (err as Error).message },
+      { status: 500 },
+    );
+  }
+  const pyDesc = describePythonBin(py);
 
   let stdout = "";
   let stderr = "";
 
   try {
     await new Promise<void>((resolve, reject) => {
-      const proc = spawn("python3", [scriptPath], {
+      const proc = spawn(py.cmd, [...py.args, scriptPath], {
         cwd,
         env: process.env,
         stdio: ["ignore", "pipe", "pipe"],
@@ -37,7 +52,7 @@ export async function GET() {
         reject(
           new Error(
             `list_projects.py exceeded ${TIMEOUT_MS}ms — likely stuck on OAuth login. ` +
-              `Run \`python3 ${SCRIPT_REL}\` from the project root to complete browser auth.`,
+              `Run \`${pyDesc} ${SCRIPT_REL}\` from the project root to complete browser auth.`,
           ),
         );
       }, TIMEOUT_MS);
@@ -47,7 +62,7 @@ export async function GET() {
 
       proc.on("error", (err) => {
         clearTimeout(timer);
-        reject(new Error(`Failed to spawn python3: ${err.message}`));
+        reject(new Error(`Failed to spawn ${pyDesc}: ${err.message}`));
       });
 
       proc.on("close", (code) => {
