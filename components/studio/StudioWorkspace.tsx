@@ -13,11 +13,12 @@ import type { SuggestionRange } from "@/components/studio/extensions/SuggestionH
 interface StudioWorkspaceProps {
   articleId: string;
   actionText?: string;
+  brandName: string;
 }
 
 const SAVED_PULSE_MS = 600;
 
-export function StudioWorkspace({ articleId, actionText }: StudioWorkspaceProps) {
+export function StudioWorkspace({ articleId, actionText, brandName }: StudioWorkspaceProps) {
   const article = useEditorStore((s) => s.articles[articleId]);
   const upsert = useEditorStore((s) => s.upsert);
 
@@ -133,6 +134,7 @@ export function StudioWorkspace({ articleId, actionText }: StudioWorkspaceProps)
         onOpenChange={setSimulatorOpen}
         articleTitle={title}
         articleText={plainText}
+        brandName={brandName}
       />
 
       <div className="flex-1 flex overflow-hidden">

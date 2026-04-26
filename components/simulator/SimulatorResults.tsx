@@ -44,9 +44,10 @@ const PROMPT_MAX = 80;
 interface SimulatorResultsProps {
   topPrompts: ScoredPrompt[];
   totalMs?: number;
+  brandName: string;
 }
 
-export function SimulatorResults({ topPrompts, totalMs }: SimulatorResultsProps) {
+export function SimulatorResults({ topPrompts, totalMs, brandName }: SimulatorResultsProps) {
   return (
     <div className="space-y-2.5">
       <div className="flex items-center gap-2 px-1 pb-2 border-b border-gray-200">
@@ -62,13 +63,21 @@ export function SimulatorResults({ topPrompts, totalMs }: SimulatorResultsProps)
       </div>
 
       {topPrompts.map((p, i) => (
-        <ResultRow key={i} prompt={p} index={i + 1} />
+        <ResultRow key={i} prompt={p} index={i + 1} brandName={brandName} />
       ))}
     </div>
   );
 }
 
-function ResultRow({ prompt: p, index }: { prompt: ScoredPrompt; index: number }) {
+function ResultRow({ 
+  prompt: p, 
+  index, 
+  brandName 
+}: { 
+  prompt: ScoredPrompt; 
+  index: number;
+  brandName: string;
+}) {
   const [expanded, setExpanded] = useState(false);
   const truncated =
     p.prompt.length > PROMPT_MAX
@@ -77,7 +86,7 @@ function ResultRow({ prompt: p, index }: { prompt: ScoredPrompt; index: number }
 
   // Build chart data: own brand row first, then competitors in input order.
   const data = [
-    { name: "Nothing", value: p.ownLikelihood, color: OWN_COLOR, isOwn: true },
+    { name: brandName, value: p.ownLikelihood, color: OWN_COLOR, isOwn: true },
     ...p.competitors.map((c) => ({
       name: c.name,
       value: c.likelihood,

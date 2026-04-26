@@ -25,14 +25,20 @@ Two surfaces, one workflow.
 - An **Actions** page with Owned / Earned tabs powered by **live Peec MCP data** for the selected project.
 - Every action card has a **Draft** button that opens it in the editor.
 
+![Peec Dashboard](img/Peec_Dashboard.png)
+
 ### 2. The Content Studio editor
 - Tiptap rich-text editor (title + body, Notion/Medium feel).
 - Right-rail **GEO suggestions**, debounced 800ms after typing, each with an expandable **"Technical Why?"** drawer that explains the data behind the suggestion (share of voice, competitor dominance, citation lift).
 - Inline document highlights mapped to Tiptap doc positions, with one-click **Apply edit** when a `suggestedEdit` is present.
 - A prominent **Run GEO Simulator** button in the top right.
 
+![Content Studio Editor](img/Content_Studio_Editor.png)
+
 ### The GEO Simulator
 A 4-step pipeline that runs in 5–8 seconds and tells the writer how their draft would actually perform across AI engines:
+
+![GEO Simulator](img/GEO_Simulator.png)
 
 1. **Extract entities** from the draft → Pioneer (GLiNER fine-tune)
 2. **Generate 15 candidate prompts** users might ask → Gemini Flash
@@ -49,11 +55,26 @@ This project uses **3** Big Berlin Hack partner technologies (the minimum requir
 
 | Partner | Where it's used | File |
 | --- | --- | --- |
-| **Google DeepMind — Gemini 2.5 Pro & Flash** | Pro generates the inline GEO suggestions and scores prompts in the simulator. Flash bulk-generates candidate prompts. | `lib/gemini.ts` |
+| **Google DeepMind — Gemini Pro & Flash** | Pro generates the inline GEO suggestions and scores prompts in the simulator. Flash bulk-generates candidate prompts. | `lib/gemini.ts` |
 | **Tavily** | Live SERP + competitor content lookup for the topic of the article being written. Cached per-article, refreshable on demand. | `lib/tavily.ts` |
 | **Fastino — Pioneer (GLiNER fine-tune)** | Fast, cheap entity extraction (brands, competitors, products, citable claims) before every Gemini call so the LLM gets structured input. | `lib/pioneer.ts` |
 
 The **Peec AI MCP** powers the dashboard data and the GEO baseline lookup in the simulator (`vendor/peec_full_fetch.py` + `lib/peec.ts`).
+
+---
+
+## Data pipeline
+
+
+### Insights 
+Feeds data in the insights panel which creates actionable suggestions for your drafted text. 
+
+![Insights Panel](img/Insights_Pipeline.png)
+
+### GEO Simulation
+Feeds data in the GEO simulator which is a reverse-engineered AI-Crawler.
+
+![GEO Generator Pipeline](img/GEO_Generator_Pipeline.png)
 
 ---
 

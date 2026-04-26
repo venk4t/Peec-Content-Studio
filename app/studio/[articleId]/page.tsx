@@ -16,6 +16,7 @@ export default async function StudioPage({
     <StudioWorkspace 
       articleId={articleId} 
       actionText={action?.text || ""} 
+      brandName={project.projectName}
     />
   );
 }

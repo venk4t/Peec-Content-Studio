@@ -29,6 +29,7 @@ interface SimulatorModalProps {
   /** Called when the modal opens — caller starts the SSE stream here. */
   articleTitle: string;
   articleText: string;
+  brandName: string;
 }
 
 type StepState = Record<SimulatorStepKey, { status: SimulatorStepStatus; ms?: number; detail?: string }>;
@@ -45,6 +46,7 @@ export function SimulatorModal({
   onOpenChange,
   articleTitle,
   articleText,
+  brandName,
 }: SimulatorModalProps) {
   const [steps, setSteps] = useState<StepState>(initialState);
   const [results, setResults] = useState<ScoredPrompt[] | null>(null);
@@ -161,6 +163,7 @@ export function SimulatorModal({
               <SimulatorResults
                 topPrompts={results}
                 totalMs={totalMs ?? undefined}
+                brandName={brandName}
               />
             </div>
           )}
