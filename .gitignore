@@ -47,3 +47,5 @@ next-env.d.ts
 # per-project live snapshots (regenerated via /setup)
 data/peec-live-*.json
 data/.peec_tokens.json
+
+*.pyc

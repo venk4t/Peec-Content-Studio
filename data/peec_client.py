@@ -324,7 +324,12 @@ def _fetch_mcp_data(project_id: str) -> dict:
     # 7. Real Peec actions (overview → drill-downs) --------------------------
     print("[mcp] get_actions overview")
     overview = _rows_to_dicts(
-        s.call_tool("get_actions", {"scope": "overview", "project_id": project_id})
+        s.call_tool("get_actions", {
+            "scope": "overview", 
+            "project_id": project_id,
+            "start_date": start,
+            "end_date": end
+        })
     )
     overview.sort(key=lambda r: r.get("opportunity_score", 0) or 0, reverse=True)
     print(f"[mcp]   -> {len(overview)} action groups")
@@ -335,12 +340,17 @@ def _fetch_mcp_data(project_id: str) -> dict:
     max_group_score = max((g.get("opportunity_score") or 0) for g in overview) or 1.0
 
     actions: list[dict] = []
-    for og in overview[:6]:
+    for og in overview:
         agroup    = og.get("action_group_type", "OWNED")
         scope     = ACTION_TYPE_MAP.get(agroup, "owned")
         group_pct = int(((og.get("opportunity_score") or 0) / max_group_score) * 99)
 
-        args: dict[str, Any] = {"scope": scope, "project_id": project_id}
+        args: dict[str, Any] = {
+            "scope": scope, 
+            "project_id": project_id,
+            "start_date": start,
+            "end_date": end
+        }
         url_cls = og.get("url_classification")
         domain  = og.get("domain")
         if url_cls:
@@ -364,7 +374,6 @@ def _fetch_mcp_data(project_id: str) -> dict:
                 "opportunity_score": max(1, group_pct - idx),
             })
     actions.sort(key=lambda a: a["opportunity_score"], reverse=True)
-    actions = actions[:12]
     print(f"[mcp]   -> {len(actions)} concrete actions "
           f"(scores {actions[0]['opportunity_score'] if actions else 0}"
           f"..{actions[-1]['opportunity_score'] if actions else 0})")

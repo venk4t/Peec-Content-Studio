@@ -53,7 +53,7 @@ export function SwitchProjectMenu({
         <button
           type="button"
           className={cn(
-            "mx-2 mt-2 mb-3 flex items-center gap-2 px-2 h-8 rounded-md transition-colors text-left w-[calc(100%-1rem)]",
+            "flex items-center gap-2 px-2.5 h-8 rounded-md transition-colors text-left",
             open ? "bg-gray-100" : "hover:bg-gray-100",
           )}
         >

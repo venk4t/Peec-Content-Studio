@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import {
@@ -12,6 +13,13 @@ export const maxDuration = 90; // Vercel runtime cap (seconds)
 
 const SCRIPT_REL = path.join("vendor", "peec_full_fetch.py");
 const TIMEOUT_MS = 80_000; // < maxDuration so we can emit a clean error event
+
+/** Resolve to .venv python if available, else fall back to system python3. */
+function resolvePython(): string {
+  const venv = path.join(process.cwd(), ".venv", "bin", "python3");
+  if (fs.existsSync(venv)) return venv;
+  return "python3";
+}
 
 const RequestSchema = z.object({
   projectId: z.string().refine(isValidProjectId, {
@@ -86,7 +94,7 @@ export async function POST(req: Request) {
       let proc: ReturnType<typeof spawn>;
       try {
         proc = spawn(
-          py.cmd,
+          resolvePython(),
           [
             ...py.args,
             scriptPath,

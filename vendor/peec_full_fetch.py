@@ -42,7 +42,7 @@ from typing import Any
 # drops `get_actions` drill-down streams mid-flight; MCPSession's built-in
 # retry costs ~30s per attempt. Past that, "actions unavailable" is a better
 # user experience than blowing the route's overall budget.
-ACTIONS_DEADLINE_S = 30
+ACTIONS_DEADLINE_S = 60
 
 # Reuse the existing OAuth + MCP transport that lives in data/.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "data"))
@@ -376,16 +376,13 @@ def _derive_sentiment_data(
 
 
 def _section_actions(s: MCPSession, project_id: str) -> dict:
-    """Section 13 — actions. Fetches overview + drill-downs (mirrors peec_client)."""
-    ACTION_TYPE_MAP = {
-        "OWNED": "owned",
-        "EDITORIAL": "editorial",
-        "UGC": "ugc",
-        "REFERENCE": "reference",
-    }
+    """Section 13 — actions. Fetches owned-only overview + drill-downs."""
     overview = _rows_to_dicts(
         s.call_tool("get_actions", {"scope": "overview", "project_id": project_id})
     )
+    # Only keep OWNED action groups — earned types (editorial, ugc, reference)
+    # cannot be acted on from our own pages.
+    overview = [g for g in overview if g.get("action_group_type", "").upper() == "OWNED"]
     overview.sort(key=lambda r: r.get("opportunity_score", 0) or 0, reverse=True)
     if not overview:
         return {"status": "ok", "items": []}
@@ -394,33 +391,48 @@ def _section_actions(s: MCPSession, project_id: str) -> dict:
         (g.get("opportunity_score") or 0) for g in overview
     ) or 1.0
 
-    items: list[dict] = []
-    for og in overview[:6]:
-        agroup = og.get("action_group_type", "OWNED")
-        scope = ACTION_TYPE_MAP.get(agroup, "owned")
+    import concurrent.futures
+    
+    def fetch_drill(og):
         group_pct = int(((og.get("opportunity_score") or 0) / max_group_score) * 99)
 
-        args: dict[str, Any] = {"scope": scope, "project_id": project_id}
-        url_cls = og.get("url_classification")
+        args: dict[str, Any] = {"scope": "owned", "project_id": project_id}
+        url_cls = og.get("url_classification") or ""
         domain = og.get("domain")
         if url_cls:
             args["url_classification"] = url_cls
         elif domain:
             args["domain"] = domain
+            
+        drill_items = []
         try:
             drill_rows = _rows_to_dicts(s.call_tool("get_actions", args))
+            for idx, r in enumerate(drill_rows):
+                drill_items.append({
+                    "text": (r.get("text") or "").strip(),
+                    "type": "owned",
+                    "url_classification": url_cls,
+                    "opportunity_score": max(1, group_pct - idx),
+                })
         except Exception as e:
-            log(f"[fetch]   drill {scope}/{url_cls or domain or '?'} failed: {e}")
-            continue
-        for idx, r in enumerate(drill_rows):
-            items.append({
-                "id": f"{scope}_{len(items):02d}",
-                "text": (r.get("text") or "").strip(),
-                "type": scope,
-                "opportunity_score": max(1, group_pct - idx),
-            })
+            log(f"[fetch]   drill owned/{url_cls or domain or '?'} failed: {e}")
+        return drill_items
+
+    items: list[dict] = []
+    
+    # Run drill-downs in parallel to avoid timeout
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        future_to_og = {executor.submit(fetch_drill, og): og for og in overview}
+        for future in concurrent.futures.as_completed(future_to_og):
+            drill_items = future.result()
+            items.extend(drill_items)
+            
+    # Assign IDs based on final flat list to ensure uniqueness
+    for i, item in enumerate(items):
+        item["id"] = f"owned_{i:02d}"
+        
     items.sort(key=lambda a: a["opportunity_score"], reverse=True)
-    return {"status": "ok", "items": items[:12]}
+    return {"status": "ok", "items": items}
 
 
 def _section_historical_trends(

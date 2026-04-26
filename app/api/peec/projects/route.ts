@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
 import { spawn } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 import { describePythonBin, getPythonBin } from "@/lib/python-bin";
 
 const SCRIPT_REL = path.join("vendor", "list_projects.py");
 const TIMEOUT_MS = 30_000;
+
+/** Resolve to .venv python if available, else fall back to system python3. */
+function resolvePython(): string {
+  const venv = path.join(process.cwd(), ".venv", "bin", "python3");
+  if (fs.existsSync(venv)) return venv;
+  return "python3";
+}
 
 interface PeecProject {
   id: string;
@@ -41,7 +49,7 @@ export async function GET() {
 
   try {
     await new Promise<void>((resolve, reject) => {
-      const proc = spawn(py.cmd, [...py.args, scriptPath], {
+      const proc = spawn(resolvePython(), [scriptPath], {
         cwd,
         env: process.env,
         stdio: ["ignore", "pipe", "pipe"],
