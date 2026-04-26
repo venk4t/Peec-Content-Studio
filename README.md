@@ -107,6 +107,7 @@ GEMINI_API_KEY=          # Google AI Studio key
 TAVILY_API_KEY=          # tavily.com
 PIONEER_API_KEY=         # pioneer.ai (Fastino)
 PIONEER_MODEL_ID=        # the fine-tuned GLiNER model id
+PEEC_MCP_TOKEN=          # just your Peec api key
 ```
 
 The app uses Zod (`lib/env.ts`) to validate these at startup. **Missing keys fail loudly** — there is no silent fallback to mock data.
@@ -255,12 +256,8 @@ Demo flow:
 
 ## Team
 
-`<TEAM_MEMBERS>`
+Max, Venkat & Lucas
 
 Built at the **Big Berlin Hack** by Tech Europe, April 25–26 2026, at The Delta Campus & CODE University, Berlin.
 
 ---
-
-## License
-
-`<LICENSE>`
