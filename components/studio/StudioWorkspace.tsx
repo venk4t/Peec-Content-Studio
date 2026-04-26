@@ -12,11 +12,12 @@ import type { SuggestionRange } from "@/components/studio/extensions/SuggestionH
 
 interface StudioWorkspaceProps {
   articleId: string;
+  actionText?: string;
 }
 
 const SAVED_PULSE_MS = 600;
 
-export function StudioWorkspace({ articleId }: StudioWorkspaceProps) {
+export function StudioWorkspace({ articleId, actionText }: StudioWorkspaceProps) {
   const article = useEditorStore((s) => s.articles[articleId]);
   const upsert = useEditorStore((s) => s.upsert);
 
@@ -120,7 +121,7 @@ export function StudioWorkspace({ articleId }: StudioWorkspaceProps) {
   return (
     <div className="h-screen flex flex-col bg-white">
       <StudioHeader
-        title={title}
+        title={actionText || title}
         saveStatus={saveStatus}
         onRunSimulator={() => setSimulatorOpen(true)}
         simulatorDisabled={plainText.trim().length < 200}
@@ -137,11 +138,23 @@ export function StudioWorkspace({ articleId }: StudioWorkspaceProps) {
       <div className="flex-1 flex overflow-hidden">
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-[760px] mx-auto px-10 pt-12 pb-24">
-            <input
+            <textarea
+              rows={1}
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="Untitled article"
-              className="w-full bg-transparent border-0 outline-none text-[36px] font-semibold tracking-tight text-gray-900 placeholder:text-gray-300 mb-2"
+              className="w-full bg-transparent border-0 outline-none text-[36px] font-semibold tracking-tight text-gray-900 placeholder:text-gray-300 mb-2 resize-none overflow-hidden"
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = "auto";
+                target.style.height = `${target.scrollHeight}px`;
+              }}
+              ref={(el) => {
+                if (el) {
+                  el.style.height = "auto";
+                  el.style.height = `${el.scrollHeight}px`;
+                }
+              }}
             />
             <p className="text-[13px] text-gray-400 mb-6">
               Draft for AI-search visibility · suggestions update as you write.

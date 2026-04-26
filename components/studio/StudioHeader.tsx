@@ -19,6 +19,35 @@ interface StudioHeaderProps {
   simulatorDisabledReason?: string;
 }
 
+function parseMarkdownLinks(text: string) {
+  const parts = [];
+  const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    parts.push(
+      <a
+        key={match.index}
+        href={match[2]}
+        target="_blank"
+        rel="noreferrer"
+        className="text-blue-600 underline decoration-blue-200 underline-offset-2 font-medium hover:text-blue-800 transition-colors"
+      >
+        {match[1]}
+      </a>
+    );
+    lastIndex = regex.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+  return parts;
+}
+
 export function StudioHeader({
   title,
   saveStatus,
@@ -32,7 +61,7 @@ export function StudioHeader({
       onClick={onRunSimulator}
       disabled={simulatorDisabled}
       className={cn(
-        "inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[13px] font-medium transition-colors",
+        "inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[13px] font-medium transition-colors shrink-0",
         simulatorDisabled
           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
           : "bg-gray-900 text-white hover:bg-gray-800",
@@ -44,20 +73,20 @@ export function StudioHeader({
   );
 
   return (
-    <header className="h-12 shrink-0 bg-white border-b border-gray-200 px-4 flex items-center gap-3">
+    <header className="min-h-[48px] h-auto shrink-0 bg-white border-b border-gray-200 px-4 flex items-center gap-3 py-2">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 h-7 px-2 -ml-1 rounded-md text-[13px] text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+        className="inline-flex items-center gap-1.5 h-7 px-2 -ml-1 rounded-md text-[13px] text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors shrink-0"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
         <span>Back</span>
       </Link>
 
-      <span className="h-4 w-px bg-gray-200" />
+      <span className="h-4 w-px bg-gray-200 shrink-0" />
 
-      <div className="flex items-center gap-2 min-w-0">
-        <span className="text-[13px] text-gray-700 truncate max-w-[420px]">
-          {title || "Untitled article"}
+      <div className="flex items-center gap-2 min-w-0 flex-1">
+        <span className="text-[13px] text-gray-700 leading-snug">
+          {title ? parseMarkdownLinks(title) : "Untitled article"}
         </span>
         <SaveBadge status={saveStatus} />
       </div>
