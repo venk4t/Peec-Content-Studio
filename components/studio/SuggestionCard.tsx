@@ -12,14 +12,14 @@ import { cn } from "@/lib/utils";
 import type { Suggestion, Severity, SuggestionType } from "@/lib/types";
 
 const severityDot: Record<Severity, string> = {
-  high: "bg-emerald-500",
-  medium: "bg-blue-500",
+  high: "bg-red-500",
+  medium: "bg-amber-500",
   low: "bg-gray-400",
 };
 
 const severityText: Record<Severity, string> = {
-  high: "text-emerald-700",
-  medium: "text-blue-700",
+  high: "text-red-700",
+  medium: "text-amber-700",
   low: "text-gray-600",
 };
 
@@ -54,7 +54,7 @@ export function SuggestionCard({
       className={cn(
         "rounded-lg border bg-white p-3 transition-colors cursor-pointer",
         active
-          ? "border-amber-300 ring-1 ring-amber-200"
+          ? "border-blue-300 ring-1 ring-blue-200"
           : "border-gray-200 hover:border-gray-300",
       )}
     >
