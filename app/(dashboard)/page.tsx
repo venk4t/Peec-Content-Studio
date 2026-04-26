@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { Header } from "@/components/dashboard/Header";
 import { ActionCard, type Severity } from "@/components/dashboard/ActionCard";
 import { StatsRow } from "@/components/dashboard/StatsRow";
 import { getActionsStatus } from "@/lib/peec";
 import { ensureProjectSelected } from "@/lib/peec-server";
 import { RefreshFromPeecButton } from "@/components/dashboard/RefreshFromPeecButton";
+import { cn } from "@/lib/utils";
 
 function severityFromScore(score: number): Severity {
   if (score >= 80) return "high";
@@ -58,21 +60,32 @@ function classificationLabel(cls?: string): string {
   return map[cls.toLowerCase()] ?? cls.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 }
 
-export default async function DashboardHomePage() {
+export default async function DashboardHomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ filter?: string }>;
+}) {
+  const sp = await searchParams;
+  const filter = sp.filter === "article" ? "article" : "all";
   const project = await ensureProjectSelected();
 
   const { items: actions = [] } = getActionsStatus(project.projectId);
 
   // All actions from the fetcher are owned (earned types are excluded at fetch time).
-  const cards = actions.map((action) => {
+  const allCards = actions.map((action) => {
+    const label = classificationLabel(action.url_classification);
     return {
       id: action.id,
       severity: severityFromScore(action.opportunity_score),
-      typeLabel: classificationLabel(action.url_classification),
-      draftState: "enabled" as const,
+      typeLabel: label,
+      draftState: label === "Article" ? "enabled" as const : "disabled" as const,
       body: <>{parseMarkdownLinks(action.text)}</>,
     };
   });
+
+  const cards = filter === "article"
+    ? allCards.filter((c) => c.typeLabel === "Article")
+    : allCards;
 
   const stats = {
     all: cards.length,
@@ -111,13 +124,40 @@ export default async function DashboardHomePage() {
               />
 
               <div className="mt-7">
-                <div className="mb-4">
-                  <h2 className="text-[14px] font-semibold text-gray-900">
-                    All recommendations
-                  </h2>
-                  <p className="text-[12px] text-gray-500 mt-1">
-                    Act on these suggestions to increase your AI search visibility.
-                  </p>
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h2 className="text-[14px] font-semibold text-gray-900">
+                      All recommendations
+                    </h2>
+                    <p className="text-[12px] text-gray-500 mt-1">
+                      Act on these suggestions to increase your AI search visibility.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200/60">
+                    <Link
+                      href={filter === "all" ? "#" : "?filter=all"}
+                      className={cn(
+                        "px-3 py-1 text-[12px] font-medium rounded-md transition-colors",
+                        filter === "all"
+                          ? "bg-white text-gray-900 shadow-sm"
+                          : "text-gray-500 hover:text-gray-900"
+                      )}
+                    >
+                      All
+                    </Link>
+                    <Link
+                      href={filter === "article" ? "#" : "?filter=article"}
+                      className={cn(
+                        "px-3 py-1 text-[12px] font-medium rounded-md transition-colors",
+                        filter === "article"
+                          ? "bg-white text-gray-900 shadow-sm"
+                          : "text-gray-500 hover:text-gray-900"
+                      )}
+                    >
+                      Articles
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -133,4 +173,3 @@ export default async function DashboardHomePage() {
     </>
   );
 }
-
