@@ -145,6 +145,7 @@ export interface ActionItem {
   id: string;
   text: string;
   type: string;
+  url_classification?: string;
   opportunity_score: number;
 }
 

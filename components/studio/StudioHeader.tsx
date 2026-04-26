@@ -46,7 +46,7 @@ export function StudioHeader({
   return (
     <header className="h-12 shrink-0 bg-white border-b border-gray-200 px-4 flex items-center gap-3">
       <Link
-        href="/actions?tab=earned"
+        href="/"
         className="inline-flex items-center gap-1.5 h-7 px-2 -ml-1 rounded-md text-[13px] text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
